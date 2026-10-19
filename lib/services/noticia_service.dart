@@ -9,9 +9,16 @@ class NoticiaService {
   static const String _url =
       'https://jsonplaceholder.typicode.com/posts';
 
+  // Ative apenas para testar a tela de erro.
+  static bool simularErroConexao = false;
+
   Future<List<NoticiaModel>> buscarNoticias() async {
     try {
-      final resposta = await http.get(Uri.parse(_url));
+      final url = simularErroConexao
+          ? 'https://url-invalida-para-teste.invalid/posts'
+          : _url;
+
+      final resposta = await http.get(Uri.parse(url));
 
       if (resposta.statusCode == 200) {
         final List<dynamic> dados = jsonDecode(resposta.body);

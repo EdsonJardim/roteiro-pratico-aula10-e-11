@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import '../models/noticia_model.dart';
@@ -6,17 +5,12 @@ import '../models/noticia_model.dart';
 class DetalheNoticiaScreen extends StatelessWidget {
   final NoticiaModel noticia;
 
-  const DetalheNoticiaScreen({
-    super.key,
-    required this.noticia,
-  });
+  const DetalheNoticiaScreen({super.key, required this.noticia});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Detalhes da Notícia'),
-      ),
+      appBar: AppBar(title: const Text('Detalhes da Notícia')),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -51,16 +45,25 @@ class DetalheNoticiaScreen extends StatelessWidget {
                     avatar: const Icon(Icons.person, size: 18),
                     label: Text(noticia.autor),
                   ),
-                  const SizedBox(height: 16),
-                  Text(
-                    noticia.titulo,
-                    style: Theme.of(context)
-                        .textTheme
-                        .headlineSmall
-                        ?.copyWith(
-                          fontWeight: FontWeight.bold,
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.calendar_today,
+                        size: 16,
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          'Data de publicação não informada pela API',
+                          style: Theme.of(context).textTheme.bodySmall,
                         ),
+                      ),
+                    ],
                   ),
+                  const SizedBox(height: 16),
+
                   const SizedBox(height: 20),
                   const Divider(),
                   const SizedBox(height: 12),
@@ -71,9 +74,7 @@ class DetalheNoticiaScreen extends StatelessWidget {
                   const SizedBox(height: 12),
                   Text(
                     noticia.conteudoCompleto,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyLarge
+                    style: Theme.of(context).textTheme.bodyLarge
                         ?.copyWith(height: 1.6),
                   ),
                   const SizedBox(height: 24),

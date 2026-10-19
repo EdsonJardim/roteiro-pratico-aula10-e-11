@@ -20,6 +20,14 @@ class _FeedNoticiasScreenState extends State<FeedNoticiasScreen> {
   String? _erro;
   String _termoPesquisa = '';
 
+  void _alternarTesteErro() {
+    setState(() {
+      NoticiaService.simularErroConexao = !NoticiaService.simularErroConexao;
+    });
+
+    _carregarNoticias();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -77,6 +85,13 @@ class _FeedNoticiasScreenState extends State<FeedNoticiasScreen> {
       appBar: AppBar(
         title: const Text('Feed de Notícias'),
         actions: [
+          IconButton(
+            tooltip: 'Testar erro de conexão',
+            onPressed: _carregando ? null : _alternarTesteErro,
+            icon: Icon(
+              NoticiaService.simularErroConexao ? Icons.wifi_off : Icons.wifi,
+            ),
+          ),
           IconButton(
             tooltip: 'Atualizar notícias',
             onPressed: _carregando ? null : _carregarNoticias,
