@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import '../models/noticia_model.dart';
@@ -9,14 +8,12 @@ class FeedNoticiasScreen extends StatefulWidget {
   const FeedNoticiasScreen({super.key});
 
   @override
-  State<FeedNoticiasScreen> createState() =>
-      _FeedNoticiasScreenState();
+  State<FeedNoticiasScreen> createState() => _FeedNoticiasScreenState();
 }
 
 class _FeedNoticiasScreenState extends State<FeedNoticiasScreen> {
   final NoticiaService _service = NoticiaService();
-  final TextEditingController _pesquisaController =
-      TextEditingController();
+  final TextEditingController _pesquisaController = TextEditingController();
 
   List<NoticiaModel> _noticias = [];
   bool _carregando = false;
@@ -117,9 +114,7 @@ class _FeedNoticiasScreenState extends State<FeedNoticiasScreen> {
               ),
             ),
           ),
-          Expanded(
-            child: _buildConteudo(),
-          ),
+          Expanded(child: _buildConteudo()),
         ],
       ),
     );
@@ -127,9 +122,7 @@ class _FeedNoticiasScreenState extends State<FeedNoticiasScreen> {
 
   Widget _buildConteudo() {
     if (_carregando) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
+      return const Center(child: CircularProgressIndicator());
     }
 
     if (_erro != null) {
@@ -139,11 +132,7 @@ class _FeedNoticiasScreenState extends State<FeedNoticiasScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(
-                Icons.wifi_off,
-                size: 56,
-                color: Colors.red,
-              ),
+              const Icon(Icons.wifi_off, size: 56, color: Colors.red),
               const SizedBox(height: 12),
               const Text(
                 'Não foi possível carregar as notícias.',
@@ -151,10 +140,7 @@ class _FeedNoticiasScreenState extends State<FeedNoticiasScreen> {
                 style: TextStyle(fontSize: 18),
               ),
               const SizedBox(height: 8),
-              Text(
-                _erro!,
-                textAlign: TextAlign.center,
-              ),
+              Text(_erro!, textAlign: TextAlign.center),
               const SizedBox(height: 16),
               ElevatedButton.icon(
                 onPressed: _carregarNoticias,
@@ -168,9 +154,7 @@ class _FeedNoticiasScreenState extends State<FeedNoticiasScreen> {
     }
 
     if (_noticias.isEmpty) {
-      return const Center(
-        child: Text('Nenhuma notícia encontrada na API.'),
-      );
+      return const Center(child: Text('Nenhuma notícia encontrada na API.'));
     }
 
     final noticias = _noticiasFiltradas;
@@ -195,8 +179,28 @@ class _FeedNoticiasScreenState extends State<FeedNoticiasScreen> {
             clipBehavior: Clip.antiAlias,
             child: ListTile(
               contentPadding: const EdgeInsets.all(12),
-              leading: CircleAvatar(
-                child: Text('${noticia.id}'),
+              leading: Hero(
+                tag: 'noticia-${noticia.id}',
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.network(
+                    noticia.urlImagem,
+                    width: 72,
+                    height: 72,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        width: 72,
+                        height: 72,
+                        color: Colors.grey.shade300,
+                        child: const Icon(
+                          Icons.image_not_supported,
+                          color: Colors.grey,
+                        ),
+                      );
+                    },
+                  ),
+                ),
               ),
               title: Text(
                 noticia.titulo,
