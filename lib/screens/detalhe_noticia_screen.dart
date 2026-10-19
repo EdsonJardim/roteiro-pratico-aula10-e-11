@@ -5,12 +5,27 @@ import '../models/noticia_model.dart';
 class DetalheNoticiaScreen extends StatelessWidget {
   final NoticiaModel noticia;
 
-  const DetalheNoticiaScreen({super.key, required this.noticia});
+  const DetalheNoticiaScreen({
+    super.key,
+    required this.noticia,
+  });
+
+  String _formatarData(DateTime data) {
+    final dia = data.day.toString().padLeft(2, '0');
+    final mes = data.month.toString().padLeft(2, '0');
+    final ano = data.year.toString();
+
+    return '$dia/$mes/$ano';
+  }
 
   @override
   Widget build(BuildContext context) {
+    final dataPublicacao = noticia.dataPublicacao;
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Detalhes da Notícia')),
+      appBar: AppBar(
+        title: const Text('Detalhes da Notícia'),
+      ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,14 +71,24 @@ class DetalheNoticiaScreen extends StatelessWidget {
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
-                          'Data de publicação não informada pela API',
+                          dataPublicacao != null
+                              ? 'Publicado em ${_formatarData(dataPublicacao)}'
+                              : 'Data de publicação não informada pela API',
                           style: Theme.of(context).textTheme.bodySmall,
                         ),
                       ),
                     ],
                   ),
                   const SizedBox(height: 16),
-
+                  Text(
+                    noticia.titulo,
+                    style: Theme.of(context)
+                        .textTheme
+                        .headlineSmall
+                        ?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
                   const SizedBox(height: 20),
                   const Divider(),
                   const SizedBox(height: 12),
@@ -74,7 +99,9 @@ class DetalheNoticiaScreen extends StatelessWidget {
                   const SizedBox(height: 12),
                   Text(
                     noticia.conteudoCompleto,
-                    style: Theme.of(context).textTheme.bodyLarge
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyLarge
                         ?.copyWith(height: 1.6),
                   ),
                   const SizedBox(height: 24),

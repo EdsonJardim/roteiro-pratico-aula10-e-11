@@ -1,4 +1,3 @@
-
 class NoticiaModel {
   final int id;
   final int autorId;
@@ -7,6 +6,7 @@ class NoticiaModel {
   final String conteudoCompleto;
   final String autor;
   final String urlImagem;
+  final DateTime? dataPublicacao;
 
   NoticiaModel({
     required this.id,
@@ -16,35 +16,51 @@ class NoticiaModel {
     required this.conteudoCompleto,
     required this.autor,
     required this.urlImagem,
+    this.dataPublicacao,
   });
 
   factory NoticiaModel.fromJson(Map<String, dynamic> json) {
-    final String conteudo = json['body']?.toString() ??
-        'Sem conteúdo disponível.';
-
     final String tituloJson =
         json['title']?.toString() ?? 'Sem título';
 
-    final int idJson = json['id'] is int
-        ? json['id'] as int
-        : int.tryParse(json['id']?.toString() ?? '') ?? 0;
+    final String resumoJson =
+        json['description']?.toString() ?? 'Sem resumo disponível.';
 
-    final int usuarioJson = json['userId'] is int
-        ? json['userId'] as int
-        : int.tryParse(json['userId']?.toString() ?? '') ?? 1;
+    final String conteudo =
+        json['content']?.toString() ??
+        resumoJson;
 
-    final String resumoJson = conteudo.length > 40
-        ? '${conteudo.substring(0, 40)}...'
-        : conteudo;
+    final String imagemJson =
+        json['image']?.toString() ?? '';
+
+    final Map<String, dynamic> fonte =
+        json['source'] is Map<String, dynamic>
+            ? json['source'] as Map<String, dynamic>
+            : <String, dynamic>{};
+
+    final String autorJson =
+        fonte['name']?.toString() ?? 'Fonte não informada';
+
+    final String? dataJson =
+        json['publishedAt']?.toString();
+
+    final DateTime? data =
+        dataJson == null ? null : DateTime.tryParse(dataJson);
+
+    final String idTexto =
+        json['url']?.toString() ?? '$tituloJson|$autorJson';
+
+    final int idJson = idTexto.hashCode.abs();
 
     return NoticiaModel(
       id: idJson,
-      autorId: usuarioJson,
+      autorId: 0,
       titulo: tituloJson,
       resumo: resumoJson,
       conteudoCompleto: conteudo,
-      autor: 'Autor ID $usuarioJson',
-      urlImagem: 'https://picsum.photos/seed/noticia$idJson/900/400',
+      autor: autorJson,
+      urlImagem: imagemJson,
+      dataPublicacao: data,
     );
   }
 }
